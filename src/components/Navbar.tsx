@@ -1,9 +1,15 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 export default function Navbar() {
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
   return (
     <nav className="bg-white shadow-md px-6 py-4 flex justify-between items-center">
       <div className="flex space-x-6">
@@ -18,7 +24,7 @@ export default function Navbar() {
         </Link>
       </div>
       <div>
-        <WalletMultiButton />
+        {hasMounted && <WalletMultiButton />}
       </div>
     </nav>
   );
