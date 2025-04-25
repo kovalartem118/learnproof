@@ -10,7 +10,7 @@ export default function Navbar() {
         <Link href="/" className="text-lg font-bold text-purple-600 hover:text-purple-800">
           LearnProof
         </Link>
-        <Link href="/courses" className="text-gray-700 hover:text-purple-600">
+        <Link href="/create-course" className="text-gray-700 hover:text-purple-600">
           Курси
         </Link>
         <Link href="/certificates" className="text-gray-700 hover:text-purple-600">
