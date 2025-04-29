@@ -13,21 +13,45 @@ export default function CreateCoursePage() {
     description: '',
     seats: '',
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [status, setStatus] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!imageFile) {
+      setStatus('Будь ласка, додайте зображення курсу.');
+      return;
+    }
 
-    const courseData = {
-      ...formData,
-      creatorWallet: walletAddress,
-    };
+    setStatus('Створення курсу...');
 
-    console.log('Course Created:', courseData);
-    // Тут у майбутньому буде запит до бекенду / mint логіка
+    const data = new FormData();
+    data.append('title', formData.title);
+    data.append('description', formData.description);
+    data.append('seats', formData.seats);
+    data.append('wallet', walletAddress);
+    data.append('image', imageFile);
+
+    try {
+      const res = await fetch('/api/create-course', {
+        method: 'POST',
+        body: data,
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result.error || 'Помилка при створенні курсу');
+      }
+      console.log(result)
+      setStatus(`Курс створено! Mint address: ${result}`);
+    } catch (err: any) {
+      setStatus(`Помилка: ${err.message}`);
+    }
   };
 
   return (
@@ -70,12 +94,18 @@ export default function CreateCoursePage() {
             className={styles.input}
           />
 
-          <button
-            type="submit"
-            className={styles.button}
-          >
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+            required
+          />
+
+          <button type="submit" className={styles.button}>
             Створити курс
           </button>
+
+          {status && <p className="text-sm text-gray-700">{status}</p>}
         </form>
       </div>
     </main>
