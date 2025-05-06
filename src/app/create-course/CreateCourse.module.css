@@ -1,41 +1,102 @@
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.p-8 {
+  padding: 2rem;
+}
+
 .container {
-    background: #0c0c0c;
-    color: white;
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 0 20px rgba(153, 69, 255, 0.3);
-  }
-  
-  .heading {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-    color: #9945FF;
-  }
-  
-  .label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-  }
-  
-  .input,
-  .select {
-    width: 100%;
-    padding: 0.75rem;
-    border-radius: 0.5rem;
-    border: 1px solid #333;
-    margin-bottom: 1.5rem;
-    background: #1a1a1a;
-    color: white;
-  }
-  
-  .button {
-    background: linear-gradient(90deg, #9945FF, #14F195);
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 0.5rem;
-    color: black;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 20px rgba(153, 69, 255, 0.3);
+  background: linear-gradient(90deg, #f0f4f8, #d4c9ff);
+  color: #2d2d2d;
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2d2d2d;
+  margin-bottom: 20px;
+  width: 100%;
+  text-align: center;
+}
+
+.space-y-4>*+* {
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: black;
+  background: white;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #14f195;
+}
+
+.textarea.input {
+  min-height: 100px;
+}
+
+.input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  color: #333;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.input[type="file"]::-webkit-file-upload-button {
+  background-color: #14f195;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+  background-color: #12c187;
+}
+
+.button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  background-color: #14f195;
+}
+
+.button:hover {
+  background-color: #12c187;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.text-gray-700 {
+  color: #4a5568;
+}

@@ -1,13 +1,20 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useWallet } from '@solana/wallet-adapter-react';
 import styles from './claim.module.css';
 
 export default function ClaimPage() {
+  const { publicKey } = useWallet();
+  const walletAddress = publicKey?.toBase58() || '';
   const [formData, setFormData] = useState({
-    email: '',
+    wallet: walletAddress, 
     courseId: '',
   });
+
+  useEffect(() => {
+    setFormData(prev => ({ ...prev, wallet: walletAddress }));
+  }, [walletAddress]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -45,12 +52,11 @@ export default function ClaimPage() {
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <input
-            type="email"
-            name="email"
-            placeholder="Your Email"
-            value={formData.email}
-            onChange={handleChange}
-            required
+            type="text"
+            name="wallet"
+            placeholder="Your Solana Wallet Address"
+            value={formData.wallet}
+            readOnly 
             className={styles.input}
           />
 
