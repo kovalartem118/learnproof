@@ -83,7 +83,9 @@ export default function CreateCoursePage() {
     participantAddresses.forEach((address, index) => {
       data.append(`participant_${index + 1}`, address.trim());
     });
+    //data.append('participants', JSON.stringify(participantAddresses));
 
+    console.log(participantAddresses)
     try {
       const res = await fetch('/api/create-course', {
         method: 'POST',
