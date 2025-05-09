@@ -7,13 +7,18 @@ import styles from './claim.module.css';
 export default function ClaimPage() {
   const { publicKey } = useWallet();
   const walletAddress = publicKey?.toBase58() || '';
+
   const [formData, setFormData] = useState({
-    wallet: walletAddress, 
+    wallet: '',
     courseId: '',
   });
+  const [status, setStatus] = useState('');
+  const [mintAddress, setMintAddress] = useState<string | null>(null);
 
   useEffect(() => {
-    setFormData(prev => ({ ...prev, wallet: walletAddress }));
+    if (walletAddress) {
+      setFormData(prev => ({ ...prev, wallet: walletAddress }));
+    }
   }, [walletAddress]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,25 +28,27 @@ export default function ClaimPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    setStatus('Claiming your NFT...');
+    setMintAddress(null);
+
     try {
       const response = await fetch('/api/claim-nft', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        alert('NFT successfully claimed!');
+        setStatus('NFT successfully claimed!');
+        setMintAddress(data.mintAddress);
       } else {
-        alert('Error claiming NFT: ' + data.message);
+        setStatus(`Error: ${data.message || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Error claiming NFT');
+      setStatus('Error claiming NFT');
     }
   };
 
@@ -54,9 +61,8 @@ export default function ClaimPage() {
           <input
             type="text"
             name="wallet"
-            placeholder="Your Solana Wallet Address"
             value={formData.wallet}
-            readOnly 
+            readOnly
             className={styles.input}
           />
 
@@ -73,6 +79,14 @@ export default function ClaimPage() {
           <button type="submit" className={styles.button}>
             Claim NFT
           </button>
+
+          {status && <p className="mt-2 text-sm text-gray-700">{status}</p>}
+
+          {mintAddress && (
+            <p className="mt-2 text-sm text-purple-700 break-words">
+              Mint address: {mintAddress}
+            </p>
+          )}
         </form>
       </div>
     </main>
