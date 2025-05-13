@@ -16,8 +16,7 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
     const image = formData.get('image') as Blob;
     const title = formData.get('title') as string;
-    const description = formData.get('description') as string;
-    //const participants = JSON.parse(formData.get('participants') as string);
+    const description = formData.get('description') as string;    
     const participants: string[] = [];
 
     const seats = parseInt(formData.get('seats') as string, 10);
@@ -29,7 +28,7 @@ export async function POST(req: NextRequest) {
     }
 
     const requester = formData.get('wallet') as string;
-    console.log(participants)
+    
     if (!image || !title || !description || !participants || !requester) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
@@ -57,11 +56,19 @@ export async function POST(req: NextRequest) {
     const imageHash = imageRes.data.IpfsHash;
     const imageUrl = `https://gateway.pinata.cloud/ipfs/${imageHash}`;
 
-    const metadata = {
+   const metadata = {
       name: title,
       description,
       image: imageUrl,
+      attributes: [
+        {
+          trait_type: 'Participants',
+          value: JSON.stringify(participants),
+        },
+      ],
     };
+
+    console.log(metadata)
 
     const metadataRes = await axios.post('https://api.pinata.cloud/pinning/pinJSONToIPFS', metadata, {
       headers: {

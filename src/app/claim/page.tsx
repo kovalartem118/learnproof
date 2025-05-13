@@ -10,7 +10,7 @@ export default function ClaimPage() {
 
   const [formData, setFormData] = useState({
     wallet: '',
-    courseId: '',
+    collectionAddress: '',
   });
   const [status, setStatus] = useState('');
   const [mintAddress, setMintAddress] = useState<string | null>(null);
@@ -68,9 +68,9 @@ export default function ClaimPage() {
 
           <input
             type="text"
-            name="courseId"
+            name="collectionAddress"
             placeholder="Course ID"
-            value={formData.courseId}
+            value={formData.collectionAddress}
             onChange={handleChange}
             required
             className={styles.input}
