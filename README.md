@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎓 LearnProof
 
-## Getting Started
+Issuing **immutable NFT certificates** on the Solana blockchain upon completion of online courses. Transparent. Automatic. Forever.
 
-First, run the development server:
+---
+
+## 🚀 Project
+
+This project enables the creation and completion of courses, and upon finishing, users **receive an NFT certificate** that is permanently stored on the Solana blockchain. The platform supports:
+
+- 🔗 Integration with Web3 wallets (Phantom)
+- 🎨 Minting NFTs with metadata, image, and date
+- 🧾 Verification of identity via wallet address
+- 🧑‍🏫 Adding courses with photos, descriptions, and seat limits
+- 🧑‍🎓 Linking course participants and confirming completion
+- 📜 Receiving a unique NFT as a certificate of completion
+
+
+---
+
+## 📸 Example NFT
+
+![](https://gateway.pinata.cloud/ipfs/QmZE5fmA69aXKqZwz7zqq9zyedB7qv4m59dyHPt5J8sRFW)
+
+- Course Name
+- Participant
+- Issue Date
+- Logo
+- Unique mint address
+
+---
+
+## ⚙️ Technical Architecture
+
+| Side          | Technologies                           |
+|---------------|----------------------------------------|
+| Frontend      | Next.js, Tailwind CSS, TypeScript      |
+| Web3 Integration | `@solana/web3.js`, `@solana/wallet-adapter`, Phantom Wallet |
+| NFT Minting   | Metaplex JS SDK, Pinata for storage     |
+| Backend       | Next.js API routes, Solana devnet      |
+
+---
+## 📱 Social Media and Contacts
+We are actively developing the project, join us:
+
+Twitter: [@LearnProof](https://x.com/LearnProof)
+---
+
+## 📦 How to Run Locally
 
 ```bash
+git clone [https://github.com/kovalartem118/learnproof.git](https://github.com/kovalartem118/learnproof.git)
+cd learnproof
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
