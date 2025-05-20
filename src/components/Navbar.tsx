@@ -19,9 +19,12 @@ export default function Navbar() {
         <Link href="/create-course" className="text-gray-700 hover:text-purple-600">
           Create Course
         </Link>
-         <Link href="/open-course" className="text-gray-700 hover:text-purple-600">
+         <Link href="/create-open-course" className="text-gray-700 hover:text-purple-600">
           Create Open Course
-        </Link>        
+        </Link>     
+         <Link href="/view-open-course" className="text-gray-700 hover:text-purple-600">
+          View Open Course
+        </Link>    
         <Link href="/my-certificates" className="text-gray-700 hover:text-purple-600">
           My certificates
         </Link>
