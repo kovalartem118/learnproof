@@ -104,19 +104,21 @@ export default function CreateCoursePage() {
       setImageFile(null);
       setParticipantAddresses([]);
       setNumSeats(0);
-    } catch (err: any) {
-      setStatus(`Error: ${err.message}`);
+    } catch (err: unknown) {
+      const error = err instanceof Error ? err.message : 'Unknown error';
+      setStatus(`Error: ${error}`);
     }
   };
 
-  return (
-    <main className="min-h-screen bg-gradient-to-br from-white to-purple-50 p-4 sm:p-8">
-      <div className="max-w-2xl mx-auto">
-        <h1 className="text-2xl sm:text-3xl font-bold text-purple-700 mb-6 text-center">Create Course</h1>
 
-        <form onSubmit={handleSubmit} className="space-y-4 bg-white rounded-xl shadow-md p-4 sm:p-6">
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">Course Title</label>
+  return (
+    <main className={styles.container}>
+      <div className={styles.formContainer}>
+        <h1 className={styles.title}>Create Course</h1>
+
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Course Title</label>
             <input
               type="text"
               name="title"
@@ -124,24 +126,24 @@ export default function CreateCoursePage() {
               value={formData.title}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className={styles.input}
             />
           </div>
 
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">Course Description</label>
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Course Description</label>
             <textarea
               name="description"
               placeholder="Enter course description"
               value={formData.description}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent min-h-[100px]"
+              className={`${styles.input} ${styles.textarea}`}
             />
           </div>
 
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">Number of Seats</label>
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Number of Seats</label>
             <input
               type="number"
               name="seats"
@@ -149,35 +151,35 @@ export default function CreateCoursePage() {
               value={formData.seats}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className={styles.input}
             />
           </div>
 
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">Your Wallet Address</label>
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Your Wallet Address</label>
             <input
               type="text"
               value={walletAddress}
               disabled
-              className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-500"
+              className={`${styles.input} ${styles.disabledInput}`}
             />
           </div>
 
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">Course Image</label>
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Course Image</label>
             <input
               type="file"
               accept="image/*"
               onChange={(e) => setImageFile(e.target.files?.[0] || null)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className={styles.fileInput}
             />
           </div>
 
           {numSeats > 0 && (
-            <div className="space-y-4 mt-6">
-              <label className="block text-sm font-medium text-gray-700">Participant Addresses:</label>
-              <div className="space-y-2">
+            <div className={styles.participantsContainer}>
+              <label className={styles.label}>Participant Addresses:</label>
+              <div className={styles.formGroup}>
                 {participantAddresses.map((address, index) => (
                   <input
                     key={index}
@@ -186,34 +188,34 @@ export default function CreateCoursePage() {
                     value={address}
                     onChange={(e) => handleInputChange(index, e.target.value)}
                     onPaste={handlePasteAddresses}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className={`${styles.input} ${styles.participantInput}`}
                   />
                 ))}
               </div>
-              <p className="text-xs text-gray-500">You can paste multiple addresses separated by commas.</p>
+              <p className={styles.hintText}>You can paste multiple addresses separated by commas.</p>
             </div>
           )}
 
           <button
             type="submit"
-            className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors"
+            className={styles.submitButton}
           >
             Create Course
           </button>
 
           {status && (
-            <p className="text-sm text-gray-700 bg-gray-50 p-3 rounded-md">{status}</p>
+            <p className={styles.statusMessage}>{status}</p>
           )}
-          
+
           {mintAddress && (
-            <div className="mt-4 p-4 bg-purple-50 rounded-md">
-              <p className="text-sm text-gray-700">
+            <div className={styles.mintAddressContainer}>
+              <p className={styles.mintAddressLabel}>
                 Course NFT Mint Address:
               </p>
-              <p className="font-semibold text-purple-600 break-words mt-1">
+              <p className={styles.mintAddress}>
                 {mintAddress}
               </p>
-              <p className="text-xs text-gray-500 mt-2">
+              <p className={styles.mintAddressHint}>
                 Share this address to view the course NFT.
               </p>
             </div>

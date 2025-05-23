@@ -25,7 +25,7 @@ export default function Navbar() {
           LearnProof
         </Link>
 
-        {/* Mobile menu button */}
+        
         <button
           className="md:hidden text-gray-700 p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -41,8 +41,7 @@ export default function Navbar() {
             </svg>
           )}
         </button>
-
-        {/* Desktop menu */}
+        
         <div className="hidden md:flex space-x-6 items-center">
           <Link href="/create-course" className="text-gray-700 hover:text-purple-600">
             Create Course
@@ -65,7 +64,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile menu */}
+      
       {isMenuOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-md z-10 mt-1 py-2 flex flex-col items-center">
           <Link href="/create-course" className="block py-2 px-4 text-gray-700 hover:bg-gray-100" onClick={() => setIsMenuOpen(false)}>

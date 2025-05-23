@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 import FormData from 'form-data';
-import { Connection, clusterApiUrl, Keypair, PublicKey } from '@solana/web3.js';
+import { Connection, clusterApiUrl, Keypair } from '@solana/web3.js';
 import { Metaplex, keypairIdentity } from '@metaplex-foundation/js';
 import bs58 from 'bs58';
 
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
     const image = formData.get('image') as Blob;
     const title = formData.get('title') as string;
-    const description = formData.get('description') as string;    
+    const description = formData.get('description') as string;
     const participants: string[] = [];
 
     const seats = parseInt(formData.get('seats') as string, 10);
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     }
 
     const requester = formData.get('wallet') as string;
-    
+
     if (!image || !title || !description || !participants || !requester) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
     const imageHash = imageRes.data.IpfsHash;
     const imageUrl = `https://gateway.pinata.cloud/ipfs/${imageHash}`;
 
-   const metadata = {
+    const metadata = {
       name: title,
       description,
       image: imageUrl,
@@ -98,8 +98,8 @@ export async function POST(req: NextRequest) {
       mintAddress: nft.address.toBase58(),
       approvedParticipants: Array.from(approvedWallets),
     });
-  } catch (err: any) {
-    console.error('NFT creation failed:', err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    const error = err instanceof Error ? err.message : 'NFT creation failed';
+    return NextResponse.json({ error }, { status: 500 });
   }
 }

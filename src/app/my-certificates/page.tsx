@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { Connection, clusterApiUrl, PublicKey } from '@solana/web3.js';
-import { Metaplex, Nft } from '@metaplex-foundation/js';
+import { Connection, clusterApiUrl } from '@solana/web3.js';
+import { Metadata, Metaplex } from '@metaplex-foundation/js';
 import Image from 'next/image';
 
 interface CertificateNFT {
@@ -18,41 +18,54 @@ export default function MyCertificates() {
   const [nfts, setNfts] = useState<CertificateNFT[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchNFTs = async () => {
-      if (!publicKey) return;
-      setLoading(true);
-      try {
-        const connection = new Connection(clusterApiUrl('devnet'));
-        const metaplex = Metaplex.make(connection);
-        const allNFTs = await metaplex.nfts().findAllByOwner({ owner: publicKey });
+ useEffect(() => {
+  const fetchNFTs = async () => {
+    if (!publicKey) return;
+    setLoading(true);
+    try {
+      const connection = new Connection(clusterApiUrl('devnet'));
+      const metaplex = Metaplex.make(connection);
+      
+      
+      const allMetadata = (await metaplex.nfts().findAllByOwner({ owner: publicKey }))
+        .filter((nft): nft is Metadata => nft.model === 'metadata' && nft.symbol === 'LEARN');
 
-        const learnNFTs = allNFTs.filter(nft => nft.symbol === 'LEARN');
+      
+      const fetched = await Promise.all(
+        allMetadata.map(async (metadata) => {
+          
+          const asset = await metaplex.nfts().load({ metadata });
+          
+          
+          if (asset.model !== 'nft') {
+            console.warn('Found SFT, skipping');
+            return null;
+          }
 
-        const fetched = await Promise.all(
-          learnNFTs.map(async (nft) => {
-            const full = await metaplex.nfts().load({ metadata: nft });
-            const metadataRes = await fetch(full.uri);
-            const metadata = await metadataRes.json();
-            return {
-              name: metadata.name,
-              description: metadata.description,
-              image: metadata.image,
-              mint: full.address.toBase58(),
-            };
-          })
-        );
+          
+          const metadataRes = await fetch(asset.uri);
+          const metadataJson = await metadataRes.json();
+          console.log(metadataJson)
+          return {
+            name: metadataJson.name,
+            description: metadataJson.description,
+            image: metadataJson.image,
+            mint: asset.address.toBase58(),
+          };
+        })
+      );
 
-        setNfts(fetched);
-      } catch (err) {
-        console.error('Error loading NFTs:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+      
+      setNfts(fetched.filter(Boolean) as CertificateNFT[]);
+    } catch (err) {
+      console.error('Error loading NFTs:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchNFTs();
-  }, [publicKey]);
+  fetchNFTs();
+}, [publicKey]);
 
   if (!publicKey) {
     return (
@@ -68,7 +81,7 @@ export default function MyCertificates() {
     <div className="min-h-screen bg-gradient-to-br from-white to-purple-50 p-4 sm:p-6">
       <div className="max-w-5xl mx-auto">
         <h1 className="text-2xl sm:text-3xl font-bold text-purple-700 mb-6 text-center">🎓 Мої Сертифікати</h1>
-        
+
         {loading ? (
           <div className="text-center py-8">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-purple-600 border-t-transparent"></div>

@@ -1,9 +1,19 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
+import Image from 'next/image';
+
+interface OpenCourse {
+  id: number;
+  title: string;
+  description: string;
+  seats: number;
+  participants: string[];
+  image: string; 
+}
 
 export default function OpenCoursesPage() {
-  const [courses, setCourses] = useState<any[]>([]);
+  const [courses, setCourses] = useState<OpenCourse[]>([]);
   const { publicKey } = useWallet();
 
   useEffect(() => {
@@ -13,19 +23,23 @@ export default function OpenCoursesPage() {
 
   const handleJoin = (id: number) => {
     if (!publicKey) return alert('Підключіть гаманець!');
+    const walletAddress = publicKey.toBase58();
+    
     const updated = courses.map((course) => {
-      if (course.id === id && !course.participants.includes(publicKey.toBase58()) && course.participants.length < course.seats) {
+      if (course.id === id && 
+          !course.participants.includes(walletAddress) && 
+          course.participants.length < course.seats) {
         return {
           ...course,
-          participants: [...course.participants, publicKey.toBase58()],
+          participants: [...course.participants, walletAddress],
         };
       }
       return course;
     });
+    
     localStorage.setItem('open_courses', JSON.stringify(updated));
     setCourses(updated);
   };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-purple-50 p-4 sm:p-6">
       <div className="max-w-4xl mx-auto">
@@ -35,10 +49,12 @@ export default function OpenCoursesPage() {
             <div key={course.id} className="bg-white rounded-xl shadow-md overflow-hidden">
               {course.image && (
                 <div className="relative h-48 sm:h-56">
-                  <img 
-                    src={course.image} 
-                    alt={course.title} 
-                    className="w-full h-full object-cover"
+                  <Image
+                    src={course.image}
+                    alt={course.title}
+                    width={400}
+                    height={192}
+                    className="w-full h-48 object-cover rounded-lg"
                   />
                 </div>
               )}
@@ -50,7 +66,7 @@ export default function OpenCoursesPage() {
                     Місць: {course.participants.length} / {course.seats}
                   </p>
                   {publicKey && !course.participants.includes(publicKey.toBase58()) && course.participants.length < course.seats && (
-                    <button 
+                    <button
                       onClick={() => handleJoin(course.id)}
                       className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors text-sm sm:text-base"
                     >
