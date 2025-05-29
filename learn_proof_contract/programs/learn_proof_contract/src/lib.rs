@@ -1,12 +1,14 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount, MintTo, mint_to};
+use std::collections::HashSet;
+
 declare_id!("DvnnGA8jYNemr37MpXzNGtxQcCyLxyNLQv38FVJNF1Go");
 
 #[program]
 pub mod learn_proof_contract {
     use super::*;
 
-    pub fn initialize_course(
+    pub fn initialize_closed_course(
         ctx: Context<InitializeCourse>,
         participants: Vec<Pubkey>,
         end_date: i64,
@@ -16,6 +18,48 @@ pub mod learn_proof_contract {
         course.participants = participants;
         course.end_date = end_date;
         course.claimed = vec![false; course.participants.len()];
+        course.is_open = false;
+        course.max_participants = course.participants.len() as u32;
+        Ok(())
+    }
+
+    pub fn initialize_open_course(
+        ctx: Context<InitializeCourse>,
+        max_participants: u32,
+    ) -> Result<()> {
+        let course = &mut ctx.accounts.course;
+        course.instructor = ctx.accounts.instructor.key();
+        course.participants = Vec::new();
+        course.claimed = Vec::new();
+        course.is_open = true;
+        course.max_participants = max_participants;
+        course.end_date = 0; 
+        Ok(())
+    }
+
+    pub fn register_for_course(ctx: Context<RegisterForCourse>) -> Result<()> {
+        let course = &mut ctx.accounts.course;
+        
+        require!(course.is_open, ErrorCode::CourseNotOpenForRegistration);
+        require!(course.participants.len() < course.max_participants as usize, ErrorCode::CourseFull);
+        require!(!course.participants.contains(&ctx.accounts.user.key()), ErrorCode::AlreadyRegistered);
+        
+        course.participants.push(ctx.accounts.user.key());
+        course.claimed.push(false);
+        
+        Ok(())
+    }
+
+    pub fn start_course(ctx: Context<StartCourse>, end_date: i64) -> Result<()> {
+        let course = &mut ctx.accounts.course;
+        
+        require!(course.is_open, ErrorCode::CourseNotOpen);
+        require!(course.participants.len() > 0, ErrorCode::NoParticipants);
+        require!(ctx.accounts.instructor.key() == course.instructor, ErrorCode::Unauthorized);
+        
+        course.is_open = false;
+        course.end_date = end_date;
+        
         Ok(())
     }
 
@@ -45,13 +89,28 @@ pub mod learn_proof_contract {
 }
 
 #[derive(Accounts)]
-#[instruction(participants: Vec<Pubkey>)]
 pub struct InitializeCourse<'info> {
     #[account(init, payer = instructor, space = 8 + Course::MAX_SIZE)]
     pub course: Account<'info, Course>,
     #[account(mut)]
     pub instructor: Signer<'info>,
     pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct RegisterForCourse<'info> {
+    #[account(mut)]
+    pub course: Account<'info, Course>,
+    #[account(mut)]
+    pub user: Signer<'info>,
+}
+
+#[derive(Accounts)]
+pub struct StartCourse<'info> {
+    #[account(mut)]
+    pub course: Account<'info, Course>,
+    #[account(mut)]
+    pub instructor: Signer<'info>,
 }
 
 #[derive(Accounts)]
@@ -75,18 +134,32 @@ pub struct Course {
     pub participants: Vec<Pubkey>,
     pub end_date: i64,
     pub claimed: Vec<bool>,
+    pub is_open: bool,
+    pub max_participants: u32,
 }
 
 impl Course {
-    pub const MAX_SIZE: usize = 32 + 4 + (32 * 50) + 8 + 4 + (1 * 50); // max 50 
+    pub const MAX_SIZE: usize = 32 + 4 + (32 * 100) + 8 + 4 + (1 * 100) + 1 + 4; // 100
 }
 
 #[error_code]
 pub enum ErrorCode {
-    #[msg("Курс ще не завершено")] 
+    #[msg("Course is not finished yet")]
     CourseNotFinished,
-    #[msg("Адреса не є учасником курсу")]
+    #[msg("Address is not a course participant")]
     NotParticipant,
-    #[msg("NFT вже отримано")]
+    #[msg("NFT already claimed")]
     AlreadyClaimed,
+    #[msg("Course is not open for registration")]
+    CourseNotOpenForRegistration,
+    #[msg("Course is full")]
+    CourseFull,
+    #[msg("Already registered for this course")]
+    AlreadyRegistered,
+    #[msg("Course is not open")]
+    CourseNotOpen,
+    #[msg("No participants registered")]
+    NoParticipants,
+    #[msg("Unauthorized")]
+    Unauthorized,
 }
