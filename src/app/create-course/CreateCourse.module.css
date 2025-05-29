@@ -1,0 +1,175 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, white, #f5f0ff);
+  padding: 1rem;
+  color: #374151;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding: 2rem;
+  }
+}
+
+.formContainer {
+  max-width: 42rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.title {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+  color: #6b21a8;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .title {
+    font-size: 1.875rem;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+}
+
+@media (min-width: 640px) {
+  .form {
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+}
+
+.input:focus {
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px #8b5cf6;
+}
+
+.textarea {
+  min-height: 6.25rem;
+}
+
+.disabledInput {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+.fileInput {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+}
+
+.fileInput:focus {
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px #8b5cf6;
+}
+
+/* .fileInputButton::-webkit-file-upload-button {
+  background-color: #8b5cf6;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.fileInputButton::-webkit-file-upload-button:hover {
+  background-color: #7c3aed;
+} */
+
+.participantsContainer {
+  margin-top: 1.5rem;
+}
+
+.participantInput {
+  margin-bottom: 0.5rem;
+}
+
+.hintText {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background-color: #8b5cf6;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submitButton:hover {
+  background-color: #7c3aed;
+}
+
+.statusMessage {
+  font-size: 0.875rem;
+  color: #374151;
+  background-color: #f3f4f6;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+}
+
+.mintAddressContainer {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f5f3ff;
+  border-radius: 0.375rem;
+}
+
+.mintAddressLabel {
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.mintAddress {
+  font-weight: 600;
+  color: #7c3aed;
+  word-break: break-word;
+  margin-top: 0.25rem;
+}
+
+.mintAddressHint {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+}
