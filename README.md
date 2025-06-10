@@ -44,13 +44,12 @@ This project enables the creation and completion of courses, and upon finishing,
 We are actively developing the project, join us:
 
 Twitter: [@LearnProof](https://x.com/LearnProof)
-Demo: [LearnProof](https://learnproof-git-deploy-kovalartem118s-projects.vercel.app?_vercel_share=NdXI7OB2P2vu2BMATHSLBmkPxAId4I1L)
 ---
 
 ## 📦 How to Run Locally
 
 ```bash
-git clone https://github.com/kovalartem118/learnproof.git
+git clone [https://github.com/kovalartem118/learnproof.git](https://github.com/kovalartem118/learnproof.git)
 cd learnproof
 npm install
 npm run dev
