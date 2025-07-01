@@ -97,7 +97,7 @@
   box-shadow: 0 0 0 2px #8b5cf6;
 }
 
-/* .fileInputButton::-webkit-file-upload-button {
+.fileInputButton::-webkit-file-upload-button {
   background-color: #8b5cf6;
   color: white;
   border: none;
@@ -110,7 +110,7 @@
 
 .fileInputButton::-webkit-file-upload-button:hover {
   background-color: #7c3aed;
-} */
+}
 
 .participantsContainer {
   margin-top: 1.5rem;
